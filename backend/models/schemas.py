@@ -54,3 +54,15 @@ class AnalysisRequest(Coordinates):
 class ErrorResponse(BaseModel):
     detail: str
     context: Optional[dict] = None
+
+
+class PrescriptionRecommendation(BaseModel):
+    species: str
+    score: float
+    reasons: List[str]
+
+
+class PrescriptionResponse(BaseModel):
+    location: dict
+    features: dict
+    recommendations: List[PrescriptionRecommendation]
