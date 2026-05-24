@@ -1,21 +1,66 @@
-import Loading from "./Loading.jsx";
+/* PageShell.jsx - Shared layout wrapper for all inner pages */
 
-export default function PageShell({ title, subtitle, loading, error, children, action }) {
+const pageShellStyles = `
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap');
+  .ps-root { font-family: 'DM Sans', sans-serif; min-height: 100vh; background: #f0fdf4; }
+  .ps-header {
+    background: white; border-bottom: 1px solid #dcfce7;
+    padding: 24px 32px;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+  .ps-title-wrap {}
+  .ps-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: #052e16;
+  }
+  .ps-subtitle { font-size: 0.875rem; color: #4b7a59; margin-top: 4px; max-width: 540px; line-height: 1.5; }
+  .ps-body { padding: 28px 32px; }
+  .ps-loading {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 300px; gap: 16px;
+  }
+  .ps-spinner {
+    width: 40px; height: 40px; border: 3px solid #dcfce7;
+    border-top-color: #16a34a; border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  .ps-loading-text { font-size: 0.875rem; color: #4b7a59; }
+  .ps-error {
+    background: #fef2f2; border: 1px solid #fecaca;
+    border-radius: 16px; padding: 16px 20px; color: #dc2626; font-size: 0.875rem;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (max-width: 768px) {
+    .ps-header { padding: 16px 20px; }
+    .ps-body { padding: 20px; }
+  }
+`;
+
+export default function PageShell({ title, subtitle, loading, error, action, children }) {
   return (
-    <section className="glass-panel rounded-[28px] border border-white/10 p-5 md:p-6">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <h1 className="font-display text-3xl font-bold text-white md:text-4xl">{title}</h1>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">{subtitle}</p>
+    <>
+      <style>{pageShellStyles}</style>
+      <div className="ps-root">
+        <div className="ps-header">
+          <div className="ps-title-wrap">
+            <h1 className="ps-title">{title}</h1>
+            {subtitle && <p className="ps-subtitle">{subtitle}</p>}
+          </div>
+          {action && <div>{action}</div>}
         </div>
-        {action}
+        <div className="ps-body">
+          {loading ? (
+            <div className="ps-loading">
+              <div className="ps-spinner" />
+              <div className="ps-loading-text">Loading {title.toLowerCase()} data…</div>
+            </div>
+          ) : error ? (
+            <div className="ps-error">⚠ {error}</div>
+          ) : (
+            children
+          )}
+        </div>
       </div>
-
-      {loading ? <div className="mt-5"><Loading message="Fetching live analysis..." subtext="Calling FastAPI endpoints via Axios" /></div> : null}
-
-      {error ? <div className="mt-5 rounded-2xl border border-rose-500/20 bg-rose-500/10 p-4 text-sm text-rose-100">{error}</div> : null}
-
-      {!loading && !error ? <div className="mt-6">{children}</div> : null}
-    </section>
+    </>
   );
 }
