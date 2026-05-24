@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 
 const navItems = [
+  { to: "/home", label: "Home" },
   { to: "/", label: "Dashboard" },
   { to: "/biodiversity", label: "Biodiversity" },
   { to: "/erosion", label: "Erosion" },
@@ -12,7 +13,7 @@ const navItems = [
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-30 border-b border-white/8 bg-slate-950/70 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 border-b border-white/8 backdrop-blur-xl" style={{ backgroundColor: "#3d4451" }}>
       <div className="mx-auto flex max-w-[1700px] items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-forest-400/25 bg-forest-500/15 shadow-glow">
