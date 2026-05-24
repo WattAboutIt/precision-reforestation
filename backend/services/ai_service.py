@@ -46,7 +46,13 @@ def _clamp(value: float, minimum: float, maximum: float) -> float:
     return max(minimum, min(maximum, value))
 
 
-def _species_from_environment(environment: EnvironmentData) -> List[SpeciesSuggestion]:
+import sys
+from pathlib import Path
+
+# Add project root to path to enable importing ml_pipeline
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
+
+def _species_from_environment_fallback(environment: EnvironmentData) -> List[SpeciesSuggestion]:
     elevation = environment.elevation.elevation
     slope = environment.slope
     ndvi = environment.ndvi
@@ -71,6 +77,35 @@ def _species_from_environment(environment: EnvironmentData) -> List[SpeciesSugge
         species.append(SpeciesSuggestion(name="Celtis australis", confidence=72, reason="Versatile native tree that supports multi-strata restoration on moderately stable ground."))
 
     return species[:3]
+
+
+def _species_from_environment(environment: EnvironmentData) -> List[SpeciesSuggestion]:
+    try:
+        from ml_pipeline.predict import predict_species_suitability
+        
+        # Run ML model prediction
+        res = predict_species_suitability(environment.lat, environment.lng)
+        
+        species: List[SpeciesSuggestion] = []
+        for rec in res["recommendations"]:
+            # Combine reasons to fit into the UI's 'reason' text field
+            reason_text = "; ".join(rec["reasons"][:2]) if rec["reasons"] else "Suitable environmental conditions."
+            species.append(
+                SpeciesSuggestion(
+                    name=rec["species"],
+                    confidence=round(rec["score"] * 100, 1),
+                    reason=reason_text
+                )
+            )
+        
+        if species:
+            return species[:3]
+            
+    except Exception as e:
+        # Log error in stdout and fallback to rule-based heuristics
+        print(f"[ML Pipeline Error] Failed to generate recommendations: {e}. Using fallback heuristics.")
+        
+    return _species_from_environment_fallback(environment)
 
 
 def _fallback_result(environment: EnvironmentData) -> AnalysisResult:
