@@ -1,11 +1,17 @@
 from __future__ import annotations
+
 import json
 import re
+
 import httpx
+
 from backend.config.settings import get_settings
 from backend.models.schemas import (
-    ClimateData, CropAnalysisResult,
-    CropSuggestion, ElevationData, SoilData,
+    ClimateData,
+    CropAnalysisResult,
+    CropSuggestion,
+    ElevationData,
+    SoilData,
 )
 
 CROP_PROMPT = """You are an agricultural expert for Nepal and South Asia.
@@ -33,7 +39,7 @@ Return STRICT JSON only:
   "crops": [
     {{
       "name": string,
-      "local_name": string (Nepali name),
+      "local_name": string,
       "confidence": number (0-100),
       "season": "Kharif | Rabi | Year-round",
       "planting_month": string,
@@ -50,7 +56,7 @@ Return STRICT JSON only:
   "insight": string
 }}
 
-Return top 5 crops. Consider Nepal's agricultural zones:
+Return top 5 crops. Consider Nepal zones:
 - Terai (<300m): Rice, Wheat, Maize, Sugarcane, Lentils
 - Mid-hills (300-2000m): Maize, Millet, Potato, Vegetables
 - High-hills (>2000m): Potato, Buckwheat, Barley, Apple
@@ -120,13 +126,15 @@ def _fallback_crops(
                 reason="Cold-tolerant cereal suited for high-elevation dry conditions."),
         ]
 
-    irrigation_needed = climate.annual_rainfall < 1000 or climate.dry_months > 5
+    irrigation_needed = rainfall < 1000 or climate.dry_months > 5
     return CropAnalysisResult(
         crops=crops,
-        best_season="Kharif (June-November)" if climate.annual_rainfall > 1000 else "Rabi (October-March)",
+        best_season="Kharif (June-November)" if rainfall > 1000 else "Rabi (October-March)",
         irrigation_needed=irrigation_needed,
-        insight=f"At {elev:.0f}m elevation with {climate.annual_rainfall:.0f}mm annual rainfall, "
-                f"this site suits {'lowland staples' if elev < 300 else 'mid-hill mixed cropping' if elev < 2000 else 'high-value mountain crops'}.",
+        insight=(
+            f"At {elev:.0f}m elevation with {rainfall:.0f}mm annual rainfall, "
+            f"this site suits {'lowland staples' if elev < 300 else 'mid-hill mixed cropping' if elev < 2000 else 'high-value mountain crops'}."
+        ),
         climate=climate,
         soil=soil,
         elevation=elevation,
@@ -184,7 +192,7 @@ async def analyze_crops(
             )
             text = text.strip()
             if text.startswith("```"):
-                text = re.sub(r"^```(?:json)?\s*", "", text, re.IGNORECASE)
+                text = re.sub(r"^```(?:json)?\s*", "", text, flags=re.IGNORECASE)
                 text = re.sub(r"\s*```$", "", text)
             start, end = text.find("{"), text.rfind("}")
             raw = json.loads(text[start:end + 1])
