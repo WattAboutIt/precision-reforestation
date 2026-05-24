@@ -11,11 +11,15 @@ import random
 import pandas as pd
 import numpy as np
 import traceback
-from pathlib import Path
 
-from config import TRAINING_DATA_PATH, OCCURRENCE_FILES, NEPAL_BBOX
-from build_dataset import build_dataset
-from provider import MockFeatureProvider
+try:
+    from .config import TRAINING_DATA_PATH, OCCURRENCE_FILES, NEPAL_BBOX
+    from .build_dataset import build_dataset
+    from .provider import MockFeatureProvider
+except ImportError:
+    from config import TRAINING_DATA_PATH, OCCURRENCE_FILES, NEPAL_BBOX
+    from build_dataset import build_dataset
+    from provider import MockFeatureProvider
 
 
 def create_synthetic_dataset(n_samples: int = 60) -> None:
@@ -82,7 +86,10 @@ def verify_pipeline():
     # Step 2: Run training (this will train & export model artifacts)
     try:
         print("\nRunning training pipeline (train.py)... This may take time")
-        from train import train_and_evaluate
+        try:
+            from .train import train_and_evaluate
+        except ImportError:
+            from train import train_and_evaluate
 
         train_and_evaluate()
         print("Training completed successfully.")
@@ -94,7 +101,10 @@ def verify_pipeline():
     # Step 3: Run a sample inference using the trained artifacts
     try:
         print("\nRunning a sample inference using predict.py...")
-        from predict import predict_species_suitability
+        try:
+            from .predict import predict_species_suitability
+        except ImportError:
+            from predict import predict_species_suitability
 
         # Choose a sample coordinate (median of dataset)
         med_lat = float(df["decimalLatitude"].median())

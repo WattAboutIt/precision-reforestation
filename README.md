@@ -40,6 +40,20 @@ copy .env.example .env
 npm run dev
 ```
 
+## Verify ML Pipeline
+
+From the repository root, run the verification script to build or synthesize a dataset, train the model, and execute a sample inference:
+
+```bash
+python -m ml_pipeline.verify_pipeline
+```
+
+If you prefer to run the script directly, use:
+
+```bash
+python ml_pipeline\verify_pipeline.py
+```
+
 ## Environment Variables
 
 - `ANTHROPIC_API_KEY` for Claude responses
