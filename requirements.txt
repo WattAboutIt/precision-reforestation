@@ -1,7 +1,15 @@
 fastapi
 uvicorn
 pandas
-scikit-learn
 numpy
+scipy
+scikit-learn
+xgboost
+lightgbm
+shap
 joblib
 pydantic
+requests
+rasterio
+geopandas
+tenacity
