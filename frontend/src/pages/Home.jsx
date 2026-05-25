@@ -679,7 +679,7 @@ export default function Home() {
         <div className="hero-stage">
           <div className={`hero-content ${visible ? "visible" : ""}`}>
             <div className="hero-badge">
-              <div className="hero-badge-dot" />
+              <div className="hero-content visible" />
               Nepal Mountain Restoration · AI-Powered
             </div>
             <h1 className="hero-title">

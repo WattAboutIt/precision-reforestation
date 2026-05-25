@@ -185,7 +185,6 @@ export default function Dashboard() {
                 <img src="/logo.png" alt="Precision Reforestation" className="dash-logo-img" />
               </button>
               <div>
-                <div className="dash-badge"><div className="dash-badge-dot" /> Live Analysis</div>
                 <h1 className="dash-title">Restoration Intelligence Dashboard</h1>
                 <p className="dash-subtitle">Click the map or enter coordinates to analyze any Nepal site.</p>
               </div>
