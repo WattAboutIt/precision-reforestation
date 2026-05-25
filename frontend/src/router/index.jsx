@@ -7,6 +7,7 @@ import Carbon from "../pages/Carbon.jsx";
 import Species from "../pages/Species.jsx";
 import Insight from "../pages/Insight.jsx";
 import Crops from "../pages/Crops.jsx";
+import TreeMapSimulator from "../pages/TreeMapSimulator.jsx";
 
 export default function AppRoutes() {
   return (
@@ -14,6 +15,7 @@ export default function AppRoutes() {
       <Route path="/" element={<Dashboard />} />
       <Route path="/home" element={<Home />} />
       <Route path="/climate" element={<Climate />} />
+      <Route path="/tree-map-simulator" element={<TreeMapSimulator />} />
       <Route path="/biodiversity" element={<Navigate to="/climate" replace />} />
       <Route path="/erosion" element={<Erosion />} />
       <Route path="/carbon" element={<Carbon />} />
