@@ -2,19 +2,20 @@
 <html lang="en">
   <head>
     <style>
-      /* Force the main browser page to handle all vertical scrolling */
+    /* 1. Ensure the outermost window frame allows smooth, natural scrolling */
       html, body {
         height: auto !important;
         min-height: 100vh !important;
-        overflow-y: visible !important;
+        overflow-y: auto !important;
       }
 
-      /* Force every single div on the site to give up its private scrollbar */
-      div {
+      /* 2. ONLY target the #root wrapper to collapse any duplicate main container track, 
+        leaving the inner map and dashboard components completely untouched */
+      #root {
         height: auto !important;
-        max-height: none !important;
-        overflow-y: visible !important;
-    }
+        min-height: 100vh !important;
+        overflow: visible !important;
+      }
     </style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
