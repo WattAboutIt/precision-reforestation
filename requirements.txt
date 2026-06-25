@@ -13,3 +13,4 @@ requests
 rasterio
 geopandas
 tenacity
+httpx
