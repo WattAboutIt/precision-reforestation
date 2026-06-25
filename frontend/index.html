@@ -1,6 +1,21 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <style>
+      /* Force the main browser page to handle all vertical scrolling */
+      html, body {
+        height: auto !important;
+        min-height: 100vh !important;
+        overflow-y: visible !important;
+      }
+
+      /* Force every single div on the site to give up its private scrollbar */
+      div {
+        height: auto !important;
+        max-height: none !important;
+        overflow-y: visible !important;
+    }
+    </style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0f172a" />
