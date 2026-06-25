@@ -2,19 +2,19 @@
 <html lang="en">
   <head>
     <style>
-    /* 1. Ensure the outermost window frame allows smooth, natural scrolling */
+          /* 1. Make sure the main browser frame is allowed to show its scrollbar */
       html, body {
-        height: auto !important;
         min-height: 100vh !important;
         overflow-y: auto !important;
       }
 
-      /* 2. ONLY target the #root wrapper to collapse any duplicate main container track, 
-        leaving the inner map and dashboard components completely untouched */
-      #root {
-        height: auto !important;
-        min-height: 100vh !important;
-        overflow: visible !important;
+      /* 2. Hide the scrollbar track on EVERY element except the main HTML/BODY */
+      *:not(html):not(body) {
+        scrollbar-width: none !important; /* Firefox */
+      }
+
+      *:not(html):not(body)::-webkit-scrollbar {
+        display: none !important; /* Chrome, Safari, Edge, Brave */
       }
     </style>
     <meta charset="UTF-8" />
