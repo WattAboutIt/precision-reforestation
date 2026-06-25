@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8001",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8001",
 });
 
 export const getEnvironment = (lat, lng) => API.get(`/environment?lat=${lat}&lng=${lng}`);
